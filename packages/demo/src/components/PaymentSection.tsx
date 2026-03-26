@@ -2,6 +2,7 @@
 
 import { FlipButton } from "./FlipButton";
 import { CodeSnippet } from "./CodeSnippet";
+import { useScrollReveal } from "../hooks/useScrollReveal";
 
 const code = `const result = await dcf.play('H', 25.00);
 if (result.result === 'WIN') refundPayment();`;
@@ -11,12 +12,14 @@ interface PaymentSectionProps {
 }
 
 export function PaymentSection({ dcf }: PaymentSectionProps) {
+  const revealRef = useScrollReveal<HTMLDivElement>();
+
   return (
     <section
       className="section-snap min-h-screen flex flex-col items-center justify-center px-4 py-16 sm:py-20"
       style={{ backgroundColor: "#FFFFFF" }}
     >
-      <div className="w-full max-w-sm">
+      <div ref={revealRef} className="w-full max-w-sm">
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
           {/* Venmo blue gradient header */}

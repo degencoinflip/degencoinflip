@@ -2,6 +2,7 @@
 
 import { FlipButton } from "./FlipButton";
 import { CodeSnippet } from "./CodeSnippet";
+import { useScrollReveal } from "../hooks/useScrollReveal";
 
 const code = `const result = await dcf.play('H', 12.99);
 if (result.result === 'WIN') skipBilling();`;
@@ -11,12 +12,14 @@ interface SubscriptionSectionProps {
 }
 
 export function SubscriptionSection({ dcf }: SubscriptionSectionProps) {
+  const revealRef = useScrollReveal<HTMLDivElement>();
+
   return (
     <section
       className="section-snap min-h-screen flex flex-col items-center justify-center px-4 py-16 sm:py-20"
       style={{ backgroundColor: "#0A0A0A" }}
     >
-      <div className="w-full max-w-sm">
+      <div ref={revealRef} className="w-full max-w-sm">
         {/* Card */}
         <div
           className="rounded-2xl shadow-xl overflow-hidden"

@@ -2,6 +2,7 @@
 
 import { FlipButton } from "./FlipButton";
 import { CodeSnippet } from "./CodeSnippet";
+import { useScrollReveal } from "../hooks/useScrollReveal";
 
 const lineItems = [
   { name: "Chicken Burrito Bowl x1", price: "$12.99" },
@@ -17,12 +18,14 @@ interface ReceiptSectionProps {
 }
 
 export function ReceiptSection({ dcf }: ReceiptSectionProps) {
+  const revealRef = useScrollReveal<HTMLDivElement>();
+
   return (
     <section
       className="section-snap min-h-screen flex flex-col items-center justify-center px-4 py-16 sm:py-20"
       style={{ backgroundColor: "#F5F5F5" }}
     >
-      <div className="w-full max-w-sm">
+      <div ref={revealRef} className="w-full max-w-sm">
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* DoorDash red header bar */}

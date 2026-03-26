@@ -1,49 +1,61 @@
-const installCode = `npm i @degencoinflip/sdk`;
+'use client';
 
-const usageCode = `const dcf = new DegenCoinFlip({ wallet });
-const flip = await dcf.play('H', amount);
-if (flip.result === 'WIN') doSomethingAmazing();`;
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export function CTASection() {
+  const revealRef = useScrollReveal<HTMLDivElement>();
+
   return (
     <section className="section-snap min-h-screen flex flex-col items-center justify-center px-4 py-16 sm:py-20 bg-black">
-      <div className="w-full max-w-2xl text-center">
+      <div ref={revealRef} className="w-full max-w-2xl text-center">
         {/* Headline */}
-        <h2 className="text-white font-bold text-5xl sm:text-7xl tracking-tight leading-[1.1] mb-4">
+        <h2 className="text-white font-bold text-5xl sm:text-7xl tracking-tight leading-[1.1] mb-12">
           3 lines.
           <br />
           Any app.
         </h2>
 
-        <p className="text-white/40 text-lg sm:text-xl font-light mb-12 max-w-md mx-auto">
-          Add double-or-nothing to any transaction in your app with a single SDK
-          call.
-        </p>
-
-        {/* Code block */}
-        <div className="bg-white/[0.04] border border-white/[0.08] rounded-2xl p-6 sm:p-8 text-left mb-10 backdrop-blur-sm">
-          {/* Install */}
+        {/* Syntax-highlighted code block */}
+        <div className="bg-[#1a1a2e] border border-white/[0.1] rounded-xl p-6 sm:p-8 text-left mb-10 font-mono text-sm sm:text-base leading-relaxed">
+          {/* Install command */}
+          <div className="mb-4">
+            <span className="text-[#6A737D]">{'# install'}</span>
+          </div>
           <div className="mb-6">
-            <pre className="text-sm sm:text-base font-mono">
-              <span className="text-white/30 select-none">$ </span>
-              <span className="text-emerald-400">{installCode}</span>
-            </pre>
+            <span className="text-white/80">npm i </span>
+            <span className="text-[#4EC9B0]">@degencoinflip/sdk</span>
           </div>
 
           {/* Divider */}
           <div className="border-t border-white/[0.06] mb-6" />
 
-          {/* Usage */}
-          <pre className="text-sm sm:text-base font-mono leading-relaxed">
-            {usageCode.split("\n").map((line, i) => (
-              <div key={i}>
-                <span className="text-white/30 select-none">
-                  {(i + 1).toString().padStart(2)}{" "}
-                </span>
-                <span className="text-white/70">{line}</span>
-              </div>
-            ))}
-          </pre>
+          {/* Usage code */}
+          <div className="space-y-1">
+            <div>
+              <span className="text-[#79B8FF]">const</span>
+              <span className="text-white/80"> dcf = </span>
+              <span className="text-[#79B8FF]">new</span>
+              <span className="text-white/80"> </span>
+              <span className="text-yellow-300">DegenCoinFlip</span>
+              <span className="text-white/80">({'{'} wallet {'}'});</span>
+            </div>
+            <div>
+              <span className="text-[#79B8FF]">const</span>
+              <span className="text-white/80"> flip = </span>
+              <span className="text-[#79B8FF]">await</span>
+              <span className="text-white/80"> dcf.</span>
+              <span className="text-white/80">play(</span>
+              <span className="text-[#4EC9B0]">&apos;H&apos;</span>
+              <span className="text-white/80">, amount);</span>
+            </div>
+            <div>
+              <span className="text-[#79B8FF]">if</span>
+              <span className="text-white/80"> (flip.result === </span>
+              <span className="text-[#4EC9B0]">&apos;WIN&apos;</span>
+              <span className="text-white/80">) </span>
+              <span className="text-white/80">doSomethingAmazing();</span>
+            </div>
+          </div>
         </div>
 
         {/* Links */}
