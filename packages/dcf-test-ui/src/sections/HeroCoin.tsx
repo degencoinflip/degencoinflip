@@ -36,7 +36,7 @@ export function HeroCoin({ connected }: HeroCoinProps) {
 
   return (
     <section className="section hero-section">
-      <div className="hero-tagline-top">#1 MOST TRUSTED PLACE TO FLIP</div>
+      <div className="hero-tagline-top">YOUR CASINO. FIVE LINES OF CODE.</div>
 
       <div className="hero-coin-wrapper">
         <div
@@ -100,10 +100,10 @@ export function HeroCoin({ connected }: HeroCoinProps) {
         )}
       </div>
 
-      <div className="hero-tagline">click the coin. real SOL moves.</div>
+      <div className="hero-tagline">Launch your own coin flip site on Solana. Set your cut. Earn on every flip.</div>
 
       {/* Scroll indicator */}
-      <div className="hero-scroll-hint">↓ scroll to see the SDK</div>
+      <div className="hero-scroll-hint">↓ see the money</div>
     </section>
   );
 }

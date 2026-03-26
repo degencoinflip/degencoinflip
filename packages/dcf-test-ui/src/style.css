@@ -1174,7 +1174,7 @@ body {
   font-size: clamp(48px, 8vw, 96px);
   font-weight: 700;
   line-height: 1.0;
-  color: #fff;
+  color: #212529;
   letter-spacing: -0.03em;
   margin: 0;
 }
@@ -1193,6 +1193,16 @@ body {
   align-items: center;
   gap: 24px;
   font-size: 13px;
+}
+
+.closer-links a {
+  color: #512da8;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.closer-links a:hover {
+  text-decoration: underline;
 }
 
 .closer-github {
@@ -1218,19 +1228,19 @@ body {
 .closer-cta {
   display: inline-block;
   padding: 14px 36px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #512da8;
+  border: none;
   border-radius: 16px;
   color: #fff;
   font-family: 'Inter', sans-serif;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
   text-decoration: none;
   transition: all 0.2s ease;
 }
 
 .closer-cta:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.35);
+  background: #4527a0;
 }
 
 /* =============================================
@@ -1590,6 +1600,206 @@ body {
 }
 
 /* =============================================
+   Earnings Calculator — Section 2 (dark)
+   ============================================= */
+
+.ec-headline {
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 700;
+  color: #e9a63c;
+  letter-spacing: -0.02em;
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.calc-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.ec-slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ec-slider-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.ec-slider-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Range slider styling */
+.ec-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #333;
+  outline: none;
+  cursor: pointer;
+}
+
+.ec-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #e9a63c;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 6px rgba(233, 166, 60, 0.4);
+}
+
+.ec-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #e9a63c;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 6px rgba(233, 166, 60, 0.4);
+}
+
+.ec-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: #333;
+}
+
+.ec-output {
+  margin-top: 8px;
+}
+
+.ec-output-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.ec-output-sol {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 48px;
+  font-weight: 700;
+  color: #e9a63c;
+  line-height: 1.1;
+}
+
+.ec-output-usd {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  color: #fff;
+  margin-top: 4px;
+}
+
+/* Code panel for earnings calc */
+.calc-code {
+  background: #111827;
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  padding: 32px;
+  overflow-x: auto;
+}
+
+.calc-code pre {
+  margin: 0;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.calc-code code {
+  color: #e2e8f0;
+}
+
+.calc-code .code-line {
+  padding: 2px 8px;
+  border-left: 3px solid transparent;
+  border-radius: 2px;
+}
+
+.calc-code .code-line.code-highlight-gold {
+  background: rgba(233, 166, 60, 0.1);
+  border-left-color: #e9a63c;
+}
+
+.ec-tagline {
+  margin-top: 40px;
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+  max-width: 600px;
+}
+
+/* =============================================
+   Network Proof — Section 3 (light)
+   ============================================= */
+
+.np-headline {
+  font-size: clamp(24px, 3.5vw, 40px);
+  font-weight: 700;
+  color: #212529;
+  text-align: center;
+  letter-spacing: -0.02em;
+  margin-bottom: 48px;
+}
+
+.np-cards {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  max-width: 900px;
+  width: 100%;
+}
+
+.np-card {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 16px;
+  padding: 32px;
+  text-align: center;
+}
+
+.np-card-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 48px;
+  font-weight: 700;
+  color: #e9a63c;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.np-card-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.np-footnote {
+  margin-top: 32px;
+  font-size: 13px;
+  color: #6c757d;
+  text-align: center;
+}
+
+/* =============================================
    Responsive
    ============================================= */
 
@@ -1661,4 +1871,114 @@ body {
   .sw-title {
     font-size: 22px;
   }
+
+  /* Earnings Calc responsive */
+  .ec-headline {
+    font-size: 28px;
+    margin-bottom: 32px;
+  }
+
+  .ec-output-sol {
+    font-size: 32px;
+  }
+
+  .ec-output-usd {
+    font-size: 16px;
+  }
+
+  .calc-code {
+    padding: 20px;
+  }
+
+  .calc-code pre {
+    font-size: 12px;
+  }
+
+  /* Network Proof responsive */
+  .np-cards {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .np-card-number {
+    font-size: 36px;
+  }
+
+  .np-headline {
+    font-size: 24px;
+    margin-bottom: 32px;
+  }
+}
+
+/* =============================================
+   Earnings Calculator — slider styles
+   ============================================= */
+
+.calc-slider-group { margin-bottom: 24px; }
+.calc-slider-label { display: flex; justify-content: space-between; font-size: 13px; color: #999; margin-bottom: 8px; }
+.calc-slider-value { color: #e9a63c; font-family: 'JetBrains Mono', monospace; }
+.calc-slider {
+  width: 100%; -webkit-appearance: none; height: 4px;
+  background: #333; border-radius: 2px; outline: none;
+}
+.calc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 20px; height: 20px;
+  border-radius: 50%; background: #e9a63c; cursor: pointer;
+}
+.calc-result { text-align: center; margin-top: 32px; }
+.calc-result-sol { font-family: 'JetBrains Mono', monospace; font-size: 48px; font-weight: 700; color: #e9a63c; }
+.calc-result-usd { font-family: 'JetBrains Mono', monospace; font-size: 20px; color: #fff; margin-top: 4px; }
+.calc-tagline { text-align: center; color: #888; font-size: 14px; margin-top: 32px; }
+
+/* =============================================
+   Code highlight gold
+   ============================================= */
+
+.code-highlight-gold { border-left: 3px solid #e9a63c; background: rgba(233,166,60,0.08); padding: 2px 8px; }
+
+/* =============================================
+   Network proof stats
+   ============================================= */
+
+.proof-stats { display: flex; gap: 24px; max-width: 900px; width: 100%; }
+.proof-card { flex: 1; background: #fff; border: 1px solid #dee2e6; border-radius: 16px; padding: 32px; text-align: center; }
+.proof-number { font-family: 'JetBrains Mono', monospace; font-size: 48px; font-weight: 700; color: #e9a63c; }
+.proof-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: #6c757d; margin-top: 8px; }
+.proof-footnote { text-align: center; color: #6c757d; font-size: 13px; margin-top: 24px; }
+
+/* =============================================
+   Toolkit grid — Section 4
+   ============================================= */
+
+.toolkit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 900px; width: 100%; margin-bottom: 40px; }
+.toolkit-card { background: #1a1a1a; border: 1px solid #333; border-radius: 16px; padding: 28px; }
+.toolkit-icon { font-size: 24px; margin-bottom: 12px; }
+.toolkit-title { font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 8px; }
+.toolkit-desc { font-size: 13px; color: #999; line-height: 1.5; }
+
+/* =============================================
+   Closer steps
+   ============================================= */
+
+.closer-steps { display: flex; flex-direction: column; gap: 20px; margin-bottom: 40px; max-width: 500px; }
+.closer-step { display: flex; align-items: center; gap: 16px; }
+.closer-step-num { width: 36px; height: 36px; border-radius: 50%; background: #e9a63c; color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.closer-step code, .closer-step span { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #212529; }
+.closer-final { color: #6c757d; font-size: 13px; margin-top: 24px; }
+
+/* =============================================
+   Section headlines — gold / dark / light
+   ============================================= */
+
+.section-headline-gold { font-size: clamp(28px, 5vw, 48px); font-weight: 700; color: #e9a63c; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 40px; text-align: center; }
+.section-headline-dark { font-size: clamp(28px, 5vw, 48px); font-weight: 700; color: #fff; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 40px; text-align: center; }
+.section-headline-light { font-size: clamp(28px, 5vw, 48px); font-weight: 700; color: #212529; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 40px; text-align: center; }
+
+/* =============================================
+   Responsive — new sections
+   ============================================= */
+
+@media (max-width: 768px) {
+  .proof-stats { flex-direction: column; }
+  .toolkit-grid { grid-template-columns: 1fr; }
 }
