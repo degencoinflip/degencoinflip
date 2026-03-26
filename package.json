@@ -7,5 +7,11 @@
   "scripts": {
     "build": "npm run build --workspaces",
     "test": "npm run test --workspaces"
+  },
+  "dependencies": {
+    "@react-three/drei": "^9.122.0",
+    "@react-three/fiber": "^8.18.0",
+    "@types/three": "^0.183.1",
+    "three": "^0.183.2"
   }
 }

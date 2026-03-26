@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { DcfProvider, useDcf } from './provider';
 import { Connect } from './Connect';
-import { Canvas } from './Canvas';
+
+const Tavern = React.lazy(() => import('./Tavern').then(m => ({ default: m.Tavern })));
 
 function Main() {
   const { state } = useDcf();
@@ -9,7 +10,11 @@ function Main() {
   return (
     <>
       {!state.sdk && <Connect />}
-      {state.sdk && <Canvas />}
+      {state.sdk && (
+        <Suspense fallback={<div style={{ color: '#c4a45a', textAlign: 'center', marginTop: '40vh' }}>Loading tavern...</div>}>
+          <Tavern />
+        </Suspense>
+      )}
       {state.error && <div className="error-banner">{state.error}</div>}
     </>
   );
