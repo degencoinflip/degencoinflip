@@ -13,7 +13,7 @@ program
   .version('0.1.0')
   .option('-k, --keypair <path>', 'Path to Solana keypair file')
   .option('--rpc-url <url>', 'Solana RPC endpoint URL')
-  .option('-f, --format <type>', 'Output format: json, table, compact', 'json')
+  .option('-f, --format <type>', 'Output format: json, table, compact')
   .option('-v, --verbose', 'Show tx details and timing')
   .option('-q, --quiet', 'Minimal output')
   .hook('preAction', (_thisCommand, actionCommand) => {

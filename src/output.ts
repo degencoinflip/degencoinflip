@@ -13,7 +13,9 @@ function shouldUseHuman(): boolean {
   if (quiet) return false;
   if (explicitFormat === 'json' || explicitFormat === 'compact') return false;
   if (explicitFormat === 'table') return true;
-  return !!process.stdout.isTTY;
+  // Default to human. Only use JSON if explicitly piped (isTTY === false)
+  if (process.stdout.isTTY === false) return false;
+  return true;
 }
 
 function getJsonMode(): 'pretty' | 'compact' {
