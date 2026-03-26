@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 
+const TIER_RATES: Record<number, number> = { 1: 0.01, 2: 0.05, 3: 0.07, 4: 0.085, 5: 0.10 };
+const TIER_LABELS: Record<number, string> = { 1: '1%', 2: '5%', 3: '7%', 4: '8.5%', 5: '10%' };
+const SOL_PRICE = 80;
+
 export function EarningsCalc() {
   const [dailyFlips, setDailyFlips] = useState(500);
   const [avgBet, setAvgBet] = useState(0.5);
+  const [tier, setTier] = useState(1);
 
-  const monthlySOL = dailyFlips * 30 * avgBet * 0.015;
-  const monthlyUSD = monthlySOL * 140;
+  const monthlySOL = dailyFlips * 30 * avgBet * TIER_RATES[tier] * 0.035;
+  const monthlyUSD = monthlySOL * SOL_PRICE;
 
   return (
     <section className="section dark">
@@ -46,6 +51,28 @@ export function EarningsCalc() {
             />
           </div>
 
+          <div className="tier-selector">
+            {([1, 2, 3, 4, 5] as const).map((t) => (
+              <button
+                key={t}
+                className={`tier-btn${tier === t ? ' active' : ''}`}
+                style={{
+                  background: tier === t ? '#e9a63c' : '#222',
+                  color: tier === t ? '#111' : '#666',
+                  border: 'none',
+                  borderRadius: 6,
+                  padding: '6px 12px',
+                  fontSize: 13,
+                  fontWeight: tier === t ? 700 : 500,
+                  cursor: 'pointer',
+                }}
+                onClick={() => setTier(t)}
+              >
+                Tier {t} · {TIER_LABELS[t]}
+              </button>
+            ))}
+          </div>
+
           <div className="ec-output">
             <div className="ec-output-label">Monthly earnings:</div>
             <div className="ec-output-sol">{monthlySOL.toFixed(2)} SOL</div>
@@ -70,7 +97,7 @@ export function EarningsCalc() {
               </div>
               <div className="code-line">
                 {'  '}
-                <span className="code-comment">// You earn 1.5% of every flip</span>
+                <span className="code-comment">// You earn {TIER_LABELS[tier]} of every flip's 3.5% fee</span>
               </div>
               <div className="code-line">{'}'});</div>
               <div className="code-line">&nbsp;</div>

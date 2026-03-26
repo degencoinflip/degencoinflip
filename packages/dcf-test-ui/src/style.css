@@ -1982,3 +1982,140 @@ body {
   .proof-stats { flex-direction: column; }
   .toolkit-grid { grid-template-columns: 1fr; }
 }
+
+/* =============================================
+   Tier selector
+   ============================================= */
+
+.tier-selector {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.tier-btn {
+  padding: 6px 12px;
+  background: #222;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #666;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tier-btn:hover {
+  border-color: #e9a63c;
+  color: #e9a63c;
+}
+
+.tier-btn.active {
+  background: #e9a63c;
+  color: #000;
+  border-color: #e9a63c;
+  font-weight: 600;
+}
+
+/* =============================================
+   UI Gallery
+   ============================================= */
+
+.gallery-card {
+  max-width: 360px;
+  width: 100%;
+  border-radius: 16px;
+  padding: 40px;
+  text-align: center;
+  transition: opacity 0.3s ease;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.gallery-card-name {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  opacity: 0.5;
+}
+
+.gallery-coin {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 24px;
+  font-weight: 200;
+  border-width: 2px;
+  border-style: solid;
+}
+
+.gallery-toggle {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.gallery-toggle-btn {
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  border: 1px solid;
+}
+
+.gallery-amount {
+  font-size: 18px;
+  font-weight: 300;
+  margin-bottom: 16px;
+}
+
+.gallery-flip-btn {
+  padding: 10px 32px;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+  cursor: default;
+}
+
+.gallery-result {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.gallery-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.gallery-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #333;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.gallery-dot.active {
+  background: #e9a63c;
+}
+
+.gallery-tagline {
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+  margin-top: 24px;
+}
