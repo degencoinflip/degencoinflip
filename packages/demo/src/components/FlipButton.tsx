@@ -65,19 +65,20 @@ export function FlipButton({
   }, []);
 
   // ---------------------------------------------------------------------------
-  // Inline keyframes — scoped by useId to avoid collisions
+  // Inline keyframes — scoped by sanitized useId to avoid collisions
   // ---------------------------------------------------------------------------
+  const safeId = styleId.replace(/[^a-zA-Z0-9-_]/g, '');
   const keyframes = `
-    @keyframes coinFlip-${CSS.escape(styleId)} {
+    @keyframes coinFlip-${safeId} {
       0% { transform: rotateY(0deg); }
       100% { transform: rotateY(1800deg); }
     }
-    @keyframes confettiFall-${CSS.escape(styleId)} {
+    @keyframes confettiFall-${safeId} {
       0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
       50%  { transform: translateY(-150px) rotate(360deg) scale(1); opacity: 1; }
       100% { transform: translateY(100px) rotate(720deg) scale(0); opacity: 0; }
     }
-    @keyframes shake-${CSS.escape(styleId)} {
+    @keyframes shake-${safeId} {
       0%, 100% { transform: translateX(0); }
       25%      { transform: translateX(-5px); }
       75%      { transform: translateX(5px); }
@@ -158,7 +159,7 @@ export function FlipButton({
                 fontSize: "24px",
                 fontWeight: "bold",
                 color: "#8B6914",
-                animation: `coinFlip-${CSS.escape(styleId)} 1.5s ease-out`,
+                animation: `coinFlip-${safeId} 1.5s ease-out`,
                 transformStyle: "preserve-3d",
               }}
             >
@@ -222,7 +223,7 @@ export function FlipButton({
                   background: confettiColors[i % confettiColors.length],
                   left: `${10 + Math.random() * 80}%`,
                   top: "50%",
-                  animation: `confettiFall-${CSS.escape(styleId)} ${1 + Math.random() * 0.5}s ease-out forwards`,
+                  animation: `confettiFall-${safeId} ${1 + Math.random() * 0.5}s ease-out forwards`,
                   animationDelay: `${Math.random() * 0.3}s`,
                   borderRadius: Math.random() > 0.5 ? "50%" : "0",
                   opacity: 0,
@@ -240,7 +241,7 @@ export function FlipButton({
           }`}
           style={
             !won
-              ? { animation: `shake-${CSS.escape(styleId)} 0.4s ease-in-out` }
+              ? { animation: `shake-${safeId} 0.4s ease-in-out` }
               : undefined
           }
         >

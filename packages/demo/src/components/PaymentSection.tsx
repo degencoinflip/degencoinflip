@@ -53,12 +53,11 @@ export function PaymentSection({ dcf }: PaymentSectionProps) {
           {/* Payment details */}
           <div className="px-6 pb-4 flex flex-col items-center text-center -mt-2">
             {/* Avatar */}
-            <div
-              className="w-12 h-12 rounded-full flex items-center justify-center mb-4"
-              style={{ backgroundColor: "#008CFF" }}
-            >
-              <span className="text-white font-bold text-lg">A</span>
-            </div>
+            <img
+              src="https://demo.dashboardpack.com/architectui-html-pro/assets/images/avatars/2.jpg"
+              alt="Alex"
+              className="w-12 h-12 rounded-full object-cover mb-4"
+            />
 
             <h2 className="text-gray-900 font-bold text-xl tracking-tight">
               You paid Alex
