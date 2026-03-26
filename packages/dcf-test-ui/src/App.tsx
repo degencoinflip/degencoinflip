@@ -1,10 +1,8 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { DcfProvider, useDcf } from './provider';
 import { WalletButton } from './components/WalletButton';
 import { HeroCoin } from './sections/HeroCoin';
-import { EarningsCalc } from './sections/EarningsCalc';
-import { NetworkProof } from './sections/NetworkProof';
-import UIGallery from './sections/UIGallery';
+import { CodeDemo } from './sections/CodeDemo';
 import { TerminalDemo } from './sections/TerminalDemo';
 import { Closer } from './sections/Closer';
 import './style.css';
@@ -17,9 +15,7 @@ function Showcase() {
       <WalletButton />
       <div className="showcase">
         <HeroCoin connected={!!state.sdk} />
-        <EarningsCalc />
-        <NetworkProof />
-        <UIGallery />
+        <CodeDemo />
         <TerminalDemo />
         <Closer />
       </div>
