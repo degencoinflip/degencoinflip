@@ -14,49 +14,66 @@ export function SubscriptionSection({ dcf }: SubscriptionSectionProps) {
   return (
     <section
       className="section-snap min-h-screen flex flex-col items-center justify-center px-4 py-16 sm:py-20"
-      style={{ backgroundColor: "#1DB954" }}
+      style={{ backgroundColor: "#0A0A0A" }}
     >
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-sm">
         {/* Card */}
-        <div className="bg-white rounded-2xl shadow-2xl shadow-black/20 overflow-hidden">
-          <div className="px-8 pt-8 pb-4">
-            {/* Plan badge */}
-            <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 text-xs font-semibold tracking-wide uppercase px-3 py-1.5 rounded-full mb-5">
-              <div className="w-2 h-2 rounded-full bg-emerald-500" />
-              Active
+        <div
+          className="rounded-2xl shadow-xl overflow-hidden"
+          style={{
+            backgroundColor: "#181818",
+            border: "1px solid #282828",
+          }}
+        >
+          <div className="px-6 pt-8 pb-4">
+            {/* Premium badge pill */}
+            <div className="mb-5">
+              <span
+                className="inline-flex items-center gap-1.5 text-xs font-bold tracking-wider uppercase px-3 py-1 rounded-full"
+                style={{
+                  backgroundColor: "rgba(29, 185, 84, 0.15)",
+                  color: "#1DB954",
+                }}
+              >
+                <div
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: "#1DB954" }}
+                />
+                Premium
+              </span>
             </div>
 
-            <h2 className="text-gray-900 font-semibold text-xl tracking-tight mb-1">
-              Premium Plan
-            </h2>
-            <p className="text-gray-900 text-3xl font-bold tracking-tight">
+            {/* Price */}
+            <p className="text-white text-4xl font-bold tracking-tight">
               $12.99
-              <span className="text-gray-400 text-base font-light">/mo</span>
+              <span className="text-gray-500 text-base font-normal">/mo</span>
             </p>
           </div>
 
-          {/* Details */}
-          <div className="px-8 py-4">
-            <div className="flex items-center justify-between py-3 border-t border-gray-100">
-              <span className="text-gray-400 text-sm font-light">
-                Next billing
-              </span>
-              <span className="text-gray-900 text-sm font-medium">
+          {/* Billing details */}
+          <div className="px-6 py-3">
+            <div
+              className="flex items-center justify-between py-3"
+              style={{ borderTop: "1px solid #282828" }}
+            >
+              <span className="text-gray-500 text-sm">Next billing</span>
+              <span className="text-gray-300 text-sm font-medium">
                 Apr 26, 2026
               </span>
             </div>
-            <div className="flex items-center justify-between py-3 border-t border-gray-100">
-              <span className="text-gray-400 text-sm font-light">
-                Payment method
-              </span>
-              <span className="text-gray-900 text-sm font-medium">
-                **** 4242
+            <div
+              className="flex items-center justify-between py-3"
+              style={{ borderTop: "1px solid #282828" }}
+            >
+              <span className="text-gray-500 text-sm">Payment</span>
+              <span className="text-gray-300 text-sm font-medium">
+                Visa ****4242
               </span>
             </div>
           </div>
 
           {/* Flip CTA */}
-          <div className="px-8 pb-8 pt-2">
+          <div className="px-6 pb-6 pt-4">
             <FlipButton
               label="Flip for a Free Month"
               amount={12.99}
@@ -66,6 +83,13 @@ export function SubscriptionSection({ dcf }: SubscriptionSectionProps) {
               accentColor="#1DB954"
               accentHoverColor="#1AA34A"
             />
+          </div>
+
+          {/* Footer */}
+          <div className="px-6 py-3" style={{ borderTop: "1px solid #282828" }}>
+            <p className="text-center text-gray-600 text-xs">
+              Powered by @degencoinflip/sdk
+            </p>
           </div>
         </div>
 

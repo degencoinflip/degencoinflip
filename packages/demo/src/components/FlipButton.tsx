@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useId } from "react";
 
 type FlipState = "idle" | "flipping" | "won" | "lost" | "error" | "no-wallet";
 
@@ -12,6 +12,7 @@ interface FlipButtonProps {
   loseMessage?: string;
   accentColor: string;
   accentHoverColor: string;
+  className?: string;
 }
 
 export function FlipButton({
@@ -22,9 +23,12 @@ export function FlipButton({
   loseMessage = "Better luck next time",
   accentColor,
   accentHoverColor,
+  className,
 }: FlipButtonProps) {
   const [state, setState] = useState<FlipState>("idle");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [tx, setTx] = useState<string | null>(null);
+  const styleId = useId();
 
   const handleFlip = useCallback(async () => {
     if (state === "flipping") return;
@@ -39,10 +43,12 @@ export function FlipButton({
 
     setState("flipping");
     setErrorMessage("");
+    setTx(null);
 
     try {
       const result = await instance.play("H", 0.001); // Always bet 0.001 SOL for demo
       const won = result.result === "WIN";
+      setTx(result.tx ?? null);
       setState(won ? "won" : "lost");
     } catch (err: any) {
       const message =
@@ -55,13 +61,45 @@ export function FlipButton({
   const handleReset = useCallback(() => {
     setState("idle");
     setErrorMessage("");
+    setTx(null);
   }, []);
 
+  // ---------------------------------------------------------------------------
+  // Inline keyframes — scoped by useId to avoid collisions
+  // ---------------------------------------------------------------------------
+  const keyframes = `
+    @keyframes coinFlip-${CSS.escape(styleId)} {
+      0% { transform: rotateY(0deg); }
+      100% { transform: rotateY(1800deg); }
+    }
+    @keyframes confettiFall-${CSS.escape(styleId)} {
+      0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+      50%  { transform: translateY(-150px) rotate(360deg) scale(1); opacity: 1; }
+      100% { transform: translateY(100px) rotate(720deg) scale(0); opacity: 0; }
+    }
+    @keyframes shake-${CSS.escape(styleId)} {
+      0%, 100% { transform: translateX(0); }
+      25%      { transform: translateX(-5px); }
+      75%      { transform: translateX(5px); }
+    }
+  `;
+
+  const confettiColors = ["#FFD700", "#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4"];
+
+  // ---------------------------------------------------------------------------
+  // Idle
+  // ---------------------------------------------------------------------------
   if (state === "idle") {
     return (
       <button
         onClick={handleFlip}
-        className="w-full py-4 px-8 rounded-xl text-white font-semibold text-lg tracking-tight transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+        className={[
+          "w-full py-4 px-8 rounded-xl text-white font-semibold text-lg tracking-tight",
+          "transition-all duration-200 transform hover:scale-[1.02] active:scale-95 cursor-pointer",
+          className,
+        ]
+          .filter(Boolean)
+          .join(" ")}
         style={{
           backgroundColor: accentColor,
         }}
@@ -77,6 +115,9 @@ export function FlipButton({
     );
   }
 
+  // ---------------------------------------------------------------------------
+  // No-wallet
+  // ---------------------------------------------------------------------------
   if (state === "no-wallet") {
     return (
       <div className="animate-fade-in-up">
@@ -95,23 +136,46 @@ export function FlipButton({
     );
   }
 
+  // ---------------------------------------------------------------------------
+  // Flipping — 3D coin spin
+  // ---------------------------------------------------------------------------
   if (state === "flipping") {
     return (
-      <div className="w-full py-4 px-8 rounded-xl bg-gray-100 flex flex-col items-center justify-center gap-3">
-        <div className="animate-coin-spin inline-block">
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-yellow-300 via-yellow-400 to-yellow-600 flex items-center justify-center shadow-lg border-2 border-yellow-500/50">
-            <span className="text-2xl font-bold text-yellow-900 select-none">
-              $
-            </span>
+      <>
+        <style dangerouslySetInnerHTML={{ __html: keyframes }} />
+        <div className="w-full py-4 px-8 rounded-xl bg-gray-100 flex flex-col items-center justify-center gap-3">
+          <div style={{ perspective: "600px" }}>
+            <div
+              style={{
+                width: "80px",
+                height: "80px",
+                borderRadius: "50%",
+                background: "linear-gradient(135deg, #FFD700, #FFA500, #FFD700)",
+                boxShadow: "0 0 20px rgba(255, 215, 0, 0.3)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "24px",
+                fontWeight: "bold",
+                color: "#8B6914",
+                animation: `coinFlip-${CSS.escape(styleId)} 1.5s ease-out`,
+                transformStyle: "preserve-3d",
+              }}
+            >
+              H
+            </div>
           </div>
+          <span className="text-gray-500 text-sm font-medium tracking-wide animate-pulse">
+            Flipping...
+          </span>
         </div>
-        <span className="text-gray-500 text-sm font-medium tracking-wide animate-pulse">
-          Flipping...
-        </span>
-      </div>
+      </>
     );
   }
 
+  // ---------------------------------------------------------------------------
+  // Error
+  // ---------------------------------------------------------------------------
   if (state === "error") {
     return (
       <div className="animate-fade-in-up">
@@ -129,31 +193,84 @@ export function FlipButton({
     );
   }
 
+  // ---------------------------------------------------------------------------
+  // Result — won / lost
+  // ---------------------------------------------------------------------------
   const won = state === "won";
 
   return (
-    <div className="animate-fade-in-up">
-      <div
-        className={`w-full py-4 px-8 rounded-xl text-center ${
-          won
-            ? "bg-emerald-50 border border-emerald-200"
-            : "bg-gray-50 border border-gray-200"
-        }`}
-      >
-        <p
-          className={`text-lg font-semibold ${
-            won ? "text-emerald-600" : "text-gray-400"
+    <>
+      <style dangerouslySetInnerHTML={{ __html: keyframes }} />
+      <div className="animate-fade-in-up" style={{ position: "relative", overflow: "visible" }}>
+        {/* Confetti burst on win */}
+        {won && (
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              pointerEvents: "none",
+              overflow: "visible",
+            }}
+          >
+            {Array.from({ length: 20 }).map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  position: "absolute",
+                  width: "8px",
+                  height: "8px",
+                  background: confettiColors[i % confettiColors.length],
+                  left: `${10 + Math.random() * 80}%`,
+                  top: "50%",
+                  animation: `confettiFall-${CSS.escape(styleId)} ${1 + Math.random() * 0.5}s ease-out forwards`,
+                  animationDelay: `${Math.random() * 0.3}s`,
+                  borderRadius: Math.random() > 0.5 ? "50%" : "0",
+                  opacity: 0,
+                }}
+              />
+            ))}
+          </div>
+        )}
+
+        <div
+          className={`w-full py-4 px-8 rounded-xl text-center ${
+            won
+              ? "bg-emerald-50 border border-emerald-200"
+              : "bg-gray-50 border border-gray-200"
           }`}
+          style={
+            !won
+              ? { animation: `shake-${CSS.escape(styleId)} 0.4s ease-in-out` }
+              : undefined
+          }
         >
-          {won ? winMessage : loseMessage}
-        </p>
+          <p
+            className={`text-lg font-semibold ${
+              won ? "text-emerald-600" : "text-gray-400"
+            }`}
+          >
+            {won ? winMessage : loseMessage}
+          </p>
+
+          {/* Solscan link when an on-chain tx is available */}
+          {tx && (
+            <a
+              href={`https://solscan.io/tx/${tx}?cluster=devnet`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs opacity-50 hover:opacity-80 transition-opacity"
+            >
+              verified on-chain →
+            </a>
+          )}
+        </div>
+        <button
+          onClick={handleReset}
+          className="w-full mt-3 py-2 px-4 text-sm text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+        >
+          Try again
+        </button>
       </div>
-      <button
-        onClick={handleReset}
-        className="w-full mt-3 py-2 px-4 text-sm text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
-      >
-        Try again
-      </button>
-    </div>
+    </>
   );
 }
