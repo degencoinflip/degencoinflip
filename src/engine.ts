@@ -19,6 +19,7 @@ function round4(n: number): number {
   return Math.round(n * 10000) / 10000;
 }
 
+
 function totalCost(amount: number, priorityFee: number): number {
   return amount + (amount * FEE_PERCENTAGE) + (FLAT_FEE_LAMPORTS / LAMPORTS_PER_SOL) + priorityFee;
 }
@@ -131,7 +132,7 @@ export async function play(
   verboseLog(`Flip created: ${flipId}`);
 
   // 5. Deposit on-chain
-  log(`Flipping ${side === 'H' ? 'Heads' : 'Tails'} for ${amount} SOL...`);
+  log(`Flipping ${side === 'H' ? 'Heads' : 'Tails'} for ${amount} SOL (3.5% fee)...`);
   const depositTx = await depositSol(flipId, amount, side, priorityFee);
 
   // 6. Process flip (submit signature to backend)
@@ -152,16 +153,16 @@ export async function play(
 
   // 9. Final balance
   const balanceAfter = await getBalance();
-  const profit = won
-    ? payout - amount - (amount * FEE_PERCENTAGE) - (FLAT_FEE_LAMPORTS / LAMPORTS_PER_SOL)
-    : -(amount + (amount * FEE_PERCENTAGE) + (FLAT_FEE_LAMPORTS / LAMPORTS_PER_SOL));
+  const fee = round4(amount * FEE_PERCENTAGE + FLAT_FEE_LAMPORTS / LAMPORTS_PER_SOL);
+  const profit = won ? amount : -amount;
 
   return {
     result: won ? 'WIN' : 'LOSS',
     side,
     bet: amount,
+    fee,
     payout,
-    profit: round4(profit),
+    profit,
     balance_before: round4(balanceBefore),
     balance_after: round4(balanceAfter),
     tx: depositTx,

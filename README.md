@@ -20,7 +20,7 @@ $ dcf play H 1
 ## Install
 
 ```bash
-npm install -g degencoinflip-cli
+npm i -g degencoinflip/degencoinflip-cli
 ```
 
 ## Quick Start
@@ -108,6 +108,14 @@ dcf play H 1 -f json       # force JSON
 dcf play H 1 -f table      # table format
 dcf play H 1 -f compact    # single-line JSON
 dcf play H 1 -q            # quiet (minimal output)
+```
+
+## Development
+
+```bash
+git clone https://github.com/degencoinflip/degencoinflip-cli
+cd degencoinflip-cli && npm i && npm run build && npm link
+dcf --help
 ```
 
 ## Links

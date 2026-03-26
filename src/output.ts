@@ -53,6 +53,7 @@ export interface PlayOutput {
   result: 'WIN' | 'LOSS';
   side: string;
   bet: number;
+  fee: number;
   payout: number;
   profit: number;
   balance_before: number;
@@ -65,24 +66,10 @@ export interface PlayOutput {
 
 export function outputPlay(data: PlayOutput) {
   if (shouldUseHuman()) {
-    const won = data.result === 'WIN';
-    const sideName = data.side === 'H' ? 'HEADS' : 'TAILS';
-    const tag = won ? 'YOU WIN!' : 'YOU LOSE';
     const profitStr = data.profit >= 0 ? `+${data.profit}` : `${data.profit}`;
-
     console.log('');
-    console.log(`  ${sideName} — ${tag}`);
-    console.log('');
-    console.log(`  Bet      ${data.bet} SOL`);
-    if (won) {
-      console.log(`  Payout   ${data.payout} SOL`);
-    }
-    console.log(`  Profit   ${profitStr} SOL`);
-    console.log(`  Balance  ${data.balance_before} → ${data.balance_after} SOL`);
-    console.log(`  Tx       ${data.explorer}`);
-    if (data.claim_tx) {
-      console.log(`  Claim    https://solscan.io/tx/${data.claim_tx}`);
-    }
+    console.log(`  ${data.result}  ${profitStr} SOL  →  ${data.balance_after} SOL`);
+    console.log(`  ${data.explorer}`);
     console.log('');
   } else {
     outputJson(data as unknown as Record<string, unknown>);
