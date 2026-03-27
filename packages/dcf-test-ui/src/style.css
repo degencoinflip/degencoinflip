@@ -28,15 +28,11 @@ body {
 
 .showcase {
   height: 100vh;
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
-  scroll-behavior: smooth;
+  overflow-y: auto;
 }
 
-/* Each section fills viewport and snaps */
 .section {
   min-height: 100vh;
-  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -36,7 +36,7 @@ export function HeroCoin({ connected }: HeroCoinProps) {
 
   return (
     <section className="section hero-section">
-      <div className="hero-tagline-top">#1 MOST TRUSTED PLACE TO FLIP</div>
+      <div className="hero-tagline-top">ONE FUNCTION. REAL SOL.</div>
 
       <div className="hero-coin-wrapper">
         <div
@@ -100,10 +100,9 @@ export function HeroCoin({ connected }: HeroCoinProps) {
         )}
       </div>
 
-      <div className="hero-tagline">click the coin. real SOL moves.</div>
+      <div className="hero-tagline">click the coin.</div>
 
-      {/* Scroll indicator */}
-      <div className="hero-scroll-hint">↓ scroll to see the SDK</div>
+      <div className="hero-scroll-hint">↓</div>
     </section>
   );
 }
