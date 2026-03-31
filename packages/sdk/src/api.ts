@@ -112,12 +112,12 @@ export async function processCoinFlipWithMemo(id: string, signature: string, tok
 // --- Combined play endpoint (no JWT required) ---
 
 export async function playFlip(params: {
-  wallet_id: string;
+  walletId: string;
   side: string;
   amount: number;
-  deposit_signature: string;
-  flip_id: string;
-  affiliate_id?: string;
+  depositSignature: string;
+  flipId: string;
+  affiliateId?: string;
 }): Promise<any> {
   const url = `${getApiUrl()}/flips/play`;
   verboseLog(`POST ${url}`);

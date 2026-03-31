@@ -4,7 +4,7 @@ import { detectState } from './resume';
 import { getBalance, getConnection, getWallet, getProvider, getProgram, loadKeypair, resetClients, setKeypair, setWalletAdapter, getWalletAdapter } from './anchor';
 import { ensureAuth } from './auth';
 import { findDegenerateAccount, findRewardsAccount } from './pda';
-import { IGNOREABLE_AMOUNT_SOL, FEE_PERCENTAGE, getApiUrl, getRpcUrl } from './constants';
+import { IGNOREABLE_AMOUNT_SOL, FEE_PERCENTAGE, getApiUrl, getRpcUrl, setConfig } from './constants';
 import { setVerbose, setQuiet } from './logger';
 import type {
   DegenCoinFlipOptions,
@@ -49,14 +49,12 @@ export { findHouseTreasury, findHouseState, findDegenerateAccount, findRewardsAc
  */
 export class DegenCoinFlip {
   private readonly keypair?: Keypair;
-  private readonly _walletAdapter?: any;
+  private _walletAdapter?: WalletAdapter;
   private readonly affiliateId?: string;
 
   constructor(opts: DegenCoinFlipOptions) {
-    // Set env vars from options (consumed by anchor.ts, constants.ts)
-    if (opts.rpcUrl) process.env.DCF_RPC_URL = opts.rpcUrl;
-    if (opts.apiUrl) process.env.DCF_API_URL = opts.apiUrl;
-    if (opts.authority) process.env.DCF_AUTHORITY = opts.authority;
+    // Configure SDK (browser-safe — no process.env mutation)
+    setConfig({ apiUrl: opts.apiUrl, rpcUrl: opts.rpcUrl, authority: opts.authority });
 
     // Reset cached clients first
     resetClients();
@@ -68,7 +66,7 @@ export class DegenCoinFlip {
     } else if (opts.wallet) {
       // Browser wallet adapter
       setWalletAdapter(opts.wallet);
-      (this as any)._walletAdapter = opts.wallet;
+      this._walletAdapter = opts.wallet;
     } else {
       this.keypair = loadKeypair();
       setKeypair(this.keypair);
@@ -90,18 +88,19 @@ export class DegenCoinFlip {
    * Play a coin flip.
    * Handles everything: auth, state recovery, deposit, wait, claim.
    */
-  async play(side: string, amount: number, opts?: PlayOptions): Promise<FlipResult> {
+  async play(side: 'H' | 'T', amount: number, opts?: PlayOptions): Promise<FlipResult> {
     return play(side, amount, {
       noClaim: opts?.noClaim,
       priorityFee: opts?.priorityFee,
       timeout: opts?.timeout,
+      affiliateId: opts?.affiliateId ?? this.affiliateId,
     });
   }
 
   /**
    * Preview flip costs without playing.
    */
-  async dryRun(side: string, amount: number, priorityFee?: number): Promise<DryRunResult> {
+  async dryRun(side: 'H' | 'T', amount: number, priorityFee?: number): Promise<DryRunResult> {
     return dryRun(side, amount, priorityFee);
   }
 
@@ -175,9 +174,9 @@ export class DegenCoinFlip {
 
     const formatted = flipArray.slice(0, limit).map((f: any) => ({
       time: formatTimeAgo(f.createdAt || f.created_at),
-      side: f.side ?? '?',
+      side: (f.side ?? '?') as 'H' | 'T',
       bet: f.amount ?? 0,
-      result: f.won ? 'WIN' : 'LOSS',
+      result: (f.won ? 'WIN' : 'LOSS') as 'WIN' | 'LOSS',
       payout: f.won ? (f.amount ?? 0) * 2 : 0,
     }));
 

@@ -8,11 +8,23 @@ export const INITIALIZER_ID = new PublicKey('h2oMkkgUF55mxMFeuUgVYwvEnpV5kRbvHVu
 export const COLD_HOUSE_ID = new PublicKey('i821bbVqQguuDLQp72gNWd52KBXBcEAQc4sVtZxWk4n');
 export const MEMO_PROGRAM_ID = new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr');
 
-// Default authority (overridable via DCF_AUTHORITY env var)
+// Default authority (overridable via setConfig or DCF_AUTHORITY env var)
 export const DEFAULT_AUTHORITY = 'modn84SAs1ccUAmxtmRY85yPz44qixgGrUwi276WYy1';
 
+// Module-level config (set by SDK constructor, no process.env mutation)
+let _apiUrl: string | undefined;
+let _rpcUrl: string | undefined;
+let _authority: string | undefined;
+
+export function setConfig(opts: { apiUrl?: string; rpcUrl?: string; authority?: string }) {
+  _apiUrl = opts.apiUrl;
+  _rpcUrl = opts.rpcUrl;
+  _authority = opts.authority;
+}
+
 export function getAuthorityId(): PublicKey {
-  return new PublicKey(process.env.DCF_AUTHORITY ?? DEFAULT_AUTHORITY);
+  const auth = _authority ?? (typeof process !== 'undefined' ? process.env?.DCF_AUTHORITY : undefined) ?? DEFAULT_AUTHORITY;
+  return new PublicKey(auth);
 }
 
 // PDA seed strings
@@ -41,9 +53,9 @@ export const IGNOREABLE_AMOUNT_SOL = 0.001;
 export const DEFAULT_API_URL = 'https://api.degencoinflip.com/v2';
 
 export function getApiUrl(): string {
-  return process.env.DCF_API_URL ?? DEFAULT_API_URL;
+  return _apiUrl ?? (typeof process !== 'undefined' ? process.env?.DCF_API_URL : undefined) ?? DEFAULT_API_URL;
 }
 
 export function getRpcUrl(): string {
-  return process.env.DCF_RPC_URL ?? process.env.REACT_APP_RPC_URL ?? 'https://api.mainnet-beta.solana.com';
+  return _rpcUrl ?? (typeof process !== 'undefined' ? process.env?.DCF_RPC_URL : undefined) ?? 'https://api.mainnet-beta.solana.com';
 }

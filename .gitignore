@@ -5,3 +5,4 @@ CLAUDE.md
 dist/
 .next/
 *.tsbuildinfo
+yarn.lock

@@ -6,9 +6,9 @@ import { depositSol } from './deposit';
 import { buildDepositTransaction } from './deposit';
 import { claimReward } from './claim';
 import { buildClaimTransaction } from './claim';
-import { createCoinFlip, processCoinFlipWithMemo, getCoinFlip, playFlip } from './api';
+import { getCoinFlip, playFlip } from './api';
 import { findRewardsAccount } from './pda';
-import { FEE_PERCENTAGE, FLAT_FEE_LAMPORTS, DEFAULT_PRIORITY_FEE_SOL } from './constants';
+import { FEE_PERCENTAGE, FLAT_FEE_LAMPORTS, DEFAULT_PRIORITY_FEE_SOL, MIN_DEPOSIT_SOL, MAX_DEPOSIT_SOL } from './constants';
 import { Errors } from './errors';
 import { log, verboseLog } from './logger';
 import type { FlipResult, DryRunResult, ResumeResult, PlayOptions } from './types';
@@ -32,7 +32,7 @@ function totalCost(amount: number, priorityFee: number): number {
   return amount + (amount * FEE_PERCENTAGE) + (FLAT_FEE_LAMPORTS / LAMPORTS_PER_SOL) + priorityFee;
 }
 
-export async function dryRun(side: string, amount: number, priorityFee: number = DEFAULT_PRIORITY_FEE_SOL): Promise<DryRunResult> {
+export async function dryRun(side: 'H' | 'T', amount: number, priorityFee: number = DEFAULT_PRIORITY_FEE_SOL): Promise<DryRunResult> {
   const balance = await getBalance();
   const fee = amount * FEE_PERCENTAGE + FLAT_FEE_LAMPORTS / LAMPORTS_PER_SOL;
   const cost = totalCost(amount, priorityFee);
@@ -104,7 +104,7 @@ export async function resume(): Promise<ResumeResult | null> {
  * available — keypair wallets continue to use the existing multi-step flow.
  */
 async function playOnePopup(
-  side: string,
+  side: 'H' | 'T',
   amount: number,
   opts: PlayOptions = {},
 ): Promise<FlipResult> {
@@ -158,11 +158,12 @@ async function playOnePopup(
 
   // 7. Call /flips/play (no JWT — deposit signature is proof)
   const flipResult = await playFlip({
-    wallet_id: walletId,
+    walletId,
     side,
     amount,
-    deposit_signature: depositSig,
-    flip_id: flipId,
+    depositSignature: depositSig,
+    flipId,
+    affiliateId: opts.affiliateId,
   });
   const won = flipResult?.won === true;
   const payout = won ? amount * 2 : 0;
@@ -199,10 +200,14 @@ async function playOnePopup(
 }
 
 export async function play(
-  side: string,
+  side: 'H' | 'T',
   amount: number,
   opts: PlayOptions = {},
 ): Promise<FlipResult> {
+  // Validate inputs
+  if (side !== 'H' && side !== 'T') throw Errors.invalidSide(side);
+  if (amount < MIN_DEPOSIT_SOL || amount > MAX_DEPOSIT_SOL) throw Errors.invalidAmount(amount, MIN_DEPOSIT_SOL, MAX_DEPOSIT_SOL);
+
   // 1-popup flow for browser wallets with signAllTransactions
   const walletAdapter = getWalletAdapter();
   if (walletAdapter?.signAllTransactions) {
@@ -248,11 +253,12 @@ export async function play(
   // 5. Call /flips/play (no JWT — deposit signature is proof)
   verboseLog('Submitting to /flips/play...');
   const result = await playFlip({
-    wallet_id: walletId,
+    walletId,
     side,
     amount,
-    deposit_signature: depositTx,
-    flip_id: flipId,
+    depositSignature: depositTx,
+    flipId,
+    affiliateId: opts.affiliateId,
   });
 
   // 6. Determine outcome

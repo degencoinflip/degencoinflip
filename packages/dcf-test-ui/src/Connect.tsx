@@ -55,7 +55,7 @@ export function Connect() {
         signAllTransactions: (txs: any) => window.solana.signAllTransactions(txs),
       };
       // Connect to devnet for testing
-      await connectWallet(adapter, 'https://elisabeth-cwuemc-fast-devnet.helius-rpc.com', 'https://dev-api.degencoinflip.com/v2', 'dev28C6QphTgjBdzRu59uyatizY7SBJyxUNudsaxUZ8');
+      await connectWallet(adapter, 'https://api.devnet.solana.com', 'https://dev-api.degencoinflip.com/v2', 'dev28C6QphTgjBdzRu59uyatizY7SBJyxUNudsaxUZ8');
     } catch (e: any) {
       console.error('Phantom connect failed:', e);
     } finally {
@@ -76,7 +76,7 @@ export function Connect() {
         signAllTransactions: (txs: any) => window.solflare.signAllTransactions(txs),
       };
       // Connect to devnet for testing
-      await connectWallet(adapter, 'https://elisabeth-cwuemc-fast-devnet.helius-rpc.com', 'https://dev-api.degencoinflip.com/v2', 'dev28C6QphTgjBdzRu59uyatizY7SBJyxUNudsaxUZ8');
+      await connectWallet(adapter, 'https://api.devnet.solana.com', 'https://dev-api.degencoinflip.com/v2', 'dev28C6QphTgjBdzRu59uyatizY7SBJyxUNudsaxUZ8');
     } catch (e: any) {
       console.error('Solflare connect failed:', e);
     } finally {
@@ -94,7 +94,7 @@ export function Connect() {
       const secretKey = Uint8Array.from(json);
       const keypair = Keypair.fromSecretKey(secretKey);
       // Connect to devnet by default for testing
-      await connectKeypair(keypair, 'https://elisabeth-cwuemc-fast-devnet.helius-rpc.com', 'https://dev-api.degencoinflip.com/v2', 'dev28C6QphTgjBdzRu59uyatizY7SBJyxUNudsaxUZ8');
+      await connectKeypair(keypair, 'https://api.devnet.solana.com', 'https://dev-api.degencoinflip.com/v2', 'dev28C6QphTgjBdzRu59uyatizY7SBJyxUNudsaxUZ8');
     } catch (e: any) {
       console.error('Keypair load failed:', e);
     } finally {

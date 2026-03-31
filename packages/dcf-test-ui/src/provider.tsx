@@ -3,10 +3,10 @@ import { Keypair, Connection, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { DegenCoinFlip } from '@degencoinflip/sdk';
 import type { BalanceResult, HistoryResult, FlipResult, DryRunResult, WalletAdapter } from '@degencoinflip/sdk';
 
-// --- Devnet constants ---
-const HELIUS_DEVNET_RPC = 'https://elisabeth-cwuemc-fast-devnet.helius-rpc.com';
-const DEVNET_API_URL = 'https://dev-api.degencoinflip.com/v2';
-const DEVNET_AUTHORITY = 'dev28C6QphTgjBdzRu59uyatizY7SBJyxUNudsaxUZ8';
+// --- Devnet constants (configurable via env vars) ---
+const HELIUS_DEVNET_RPC = import.meta.env.VITE_HELIUS_RPC_URL ?? 'https://api.devnet.solana.com';
+const DEVNET_API_URL = import.meta.env.VITE_DCF_API_URL ?? 'https://dev-api.degencoinflip.com/v2';
+const DEVNET_AUTHORITY = import.meta.env.VITE_DCF_AUTHORITY ?? 'dev28C6QphTgjBdzRu59uyatizY7SBJyxUNudsaxUZ8';
 
 // --- State ---
 

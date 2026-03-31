@@ -17,7 +17,7 @@ function loadCache(): AuthCache {
   try {
     const fs = require('fs');
     const { join } = require('path');
-    const authFile = join(process.env.HOME ?? '~', '.config', 'dcf', 'auth.json');
+    const authFile = join(require('os').homedir(), '.config', 'dcf', 'auth.json');
     return JSON.parse(fs.readFileSync(authFile, 'utf-8'));
   } catch {
     // Browser or file not found — use memory cache
@@ -33,10 +33,10 @@ function saveCache(cache: AuthCache) {
   try {
     const fs = require('fs');
     const { join } = require('path');
-    const authDir = join(process.env.HOME ?? '~', '.config', 'dcf');
+    const authDir = join(require('os').homedir(), '.config', 'dcf');
     const authFile = join(authDir, 'auth.json');
     if (!fs.existsSync(authDir)) fs.mkdirSync(authDir, { recursive: true });
-    fs.writeFileSync(authFile, JSON.stringify(cache, null, 2));
+    fs.writeFileSync(authFile, JSON.stringify(cache, null, 2), { mode: 0o600 });
   } catch {
     // Browser — memory cache only
   }

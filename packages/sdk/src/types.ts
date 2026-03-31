@@ -43,7 +43,7 @@ export interface WalletAdapter {
 
 export interface FlipResult {
   result: 'WIN' | 'LOSS';
-  side: string;
+  side: 'H' | 'T';
   bet: number;
   fee: number;
   payout: number;
@@ -60,7 +60,7 @@ export interface FlipResult {
 
 export interface DryRunResult {
   dry_run: true;
-  side: string;
+  side: 'H' | 'T';
   bet: number;
   fee: number;
   priority_fee: number;
@@ -86,9 +86,9 @@ export interface BalanceResult {
 
 export interface HistoryFlip {
   time: string;
-  side: string;
+  side: 'H' | 'T';
   bet: number;
-  result: string;
+  result: 'WIN' | 'LOSS';
   payout: number;
 }
 
@@ -114,8 +114,8 @@ export interface HistoryOptions {
 
 export interface ResumeResult {
   resumed: boolean;
-  previous_state?: string;
-  result?: string;
+  previous_state?: 'PENDING_REWARD' | 'PENDING_FLIP';
+  result?: 'WIN' | 'LOSS' | 'UNKNOWN';
   payout?: number;
   claim_tx?: string;
   state?: string;
@@ -128,4 +128,5 @@ export interface PlayOptions {
   noClaim?: boolean;
   priorityFee?: number;
   timeout?: number;
+  affiliateId?: string;
 }

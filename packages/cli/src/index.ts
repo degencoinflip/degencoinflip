@@ -1,16 +1,19 @@
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import { Command } from 'commander';
 import { registerPlay } from './play';
 import { registerBalance } from './balance';
 import { registerHistory } from './history';
 import { setFormat, setQuiet, setVerbose, Format } from './output';
-import { DcfError, DegenCoinFlip } from '@degencoinflip/sdk';
+import { DcfError, DegenCoinFlip, loadKeypair } from '@degencoinflip/sdk';
 
+const pkg = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf-8'));
 const program = new Command();
 
 program
   .name('dcf')
   .description('Degen Coin Flip CLI — flip coins from the terminal')
-  .version('0.1.0')
+  .version(pkg.version)
   .option('-k, --keypair <path>', 'Path to Solana keypair file')
   .option('--rpc-url <url>', 'Solana RPC endpoint URL')
   .option('-f, --format <type>', 'Output format: json, table, compact')
@@ -58,10 +61,10 @@ program
     const { outputResume } = await import('./output');
     const parent = cmd.parent!;
     const parentOpts = parent.opts();
-    const keypair = parentOpts.keypair ?? process.env.DCF_KEYPAIR;
+    const keypairPath = (parentOpts.keypair ?? process.env.DCF_KEYPAIR) as string | undefined;
 
     const sdk = new DegenCoinFlip({
-      keypair,
+      keypair: keypairPath ? loadKeypair(keypairPath) : undefined,
       ...(parentOpts.rpcUrl && { rpcUrl: parentOpts.rpcUrl }),
     });
 
