@@ -9,6 +9,13 @@ export type GameState =
   | { state: 'PENDING_REWARD'; rewardSol: number }
   | { state: 'PENDING_FLIP'; depositSol: number }
 
+export interface OrphanedDeposit {
+  signature: string;
+  flipId: string;
+  amount: number;
+  side: 'H' | 'T';
+}
+
 /**
  * Detect stuck game state by checking on-chain PDA balances.
  */
@@ -38,4 +45,61 @@ export async function detectState(): Promise<GameState> {
   }
 
   return { state: 'IDLE' };
+}
+
+/**
+ * Scan recent wallet transactions for an orphaned participate() deposit.
+ * Verifies the actual on-chain balance change matches the memo amount
+ * (memo alone can be spoofed).
+ */
+export async function findOrphanedDeposit(): Promise<OrphanedDeposit | null> {
+  const connection = getConnection();
+  const player = getWallet().publicKey;
+  const [degeneratePda] = await findDegenerateAccount(player);
+
+  const sigs = await connection.getSignaturesForAddress(player, { limit: 10 });
+
+  for (const sigInfo of sigs) {
+    if (!sigInfo.memo) continue;
+
+    const memoMatch = sigInfo.memo.match(/id=([0-9a-f-]{36})\s+amount=([\d.]+)\s+side=(H|T)/);
+    if (!memoMatch) continue;
+
+    const [, flipId, memoAmount, side] = memoMatch;
+
+    // Fetch full parsed tx to verify actual balance change
+    const tx = await connection.getParsedTransaction(sigInfo.signature, {
+      maxSupportedTransactionVersion: 0,
+    });
+    if (!tx?.meta || tx.meta.err) continue;
+
+    // Find the degenerate PDA in accountKeys and check pre/post balance
+    const accounts = tx.transaction.message.accountKeys;
+    const pdaKey = degeneratePda.toBase58();
+    const pdaIndex = accounts.findIndex(
+      a => (typeof a === 'string' ? a : a.pubkey.toBase58()) === pdaKey
+    );
+    if (pdaIndex === -1) continue;
+
+    const balanceChangeLamports = tx.meta.postBalances[pdaIndex] - tx.meta.preBalances[pdaIndex];
+    const balanceChangeSol = balanceChangeLamports / LAMPORTS_PER_SOL;
+
+    // Cross-verify: actual balance change must match memo amount
+    const memoAmountNum = parseFloat(memoAmount);
+    if (Math.abs(balanceChangeSol - memoAmountNum) > 0.0001) {
+      verboseLog(`Memo amount ${memoAmount} doesn't match balance change ${balanceChangeSol} — skipping`);
+      continue;
+    }
+
+    verboseLog(`Found orphaned deposit: sig=${sigInfo.signature.slice(0, 12)}... id=${flipId} amount=${memoAmountNum} side=${side}`);
+
+    return {
+      signature: sigInfo.signature,
+      flipId,
+      amount: memoAmountNum,
+      side: side as 'H' | 'T',
+    };
+  }
+
+  return null;
 }
